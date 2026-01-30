@@ -1,5 +1,10 @@
 # ChangeLogs
 
+## `v1.0.5`
+
+- feat: add `dart` support
+- fix: improve wrapper script
+
 ## `v1.0.4`
 
 - fix: issue with new persistent terminal sessions
@@ -13,7 +18,7 @@
 ## `v1.0.2`
 
 - fix: play button issue
-- reduce useless stuffs logging when running program
+- fix: reduce unnecessary logging when running programs
 
 ## `v1.0.1`
 
