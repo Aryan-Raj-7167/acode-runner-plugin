@@ -15,19 +15,20 @@ A powerful code runner plugin for Acode that adds a **play button** to execute d
 
 ## 🛠️ Supported Languages
 
-| Language | Extensions | Status |
-|----------|------------|--------|
-| **Python** | `.py`, `.pyw` | ✅ |
-| **C** | `.c` | ✅ |
-| **C++** | `.cpp`, `.cxx`, `.cc`, `.c++` | ✅ |
-| **Java** | `.java` | ✅ |
-| **Go** | `.go` | ✅ |
-| **PHP** | `.php` | ✅ |
-| **Ruby** | `.rb` | ✅ |
-| **Rust** | `.rs` | ✅ |
-| **Lua** | `.lua` | ✅ |
-| **Luau** | `.luau` | ✅ |
-| **Shell Script** | `.sh`, `.bash` | ✅ |
+| Language         | Extensions                    | Status |
+| ---------------- | ----------------------------- | ------ |
+| **Python**       | `.py`, `.pyw`                 | ✅     |
+| **C**            | `.c`                          | ✅     |
+| **C++**          | `.cpp`, `.cxx`, `.cc`, `.c++` | ✅     |
+| **Java**         | `.java`                       | ✅     |
+| **Go**           | `.go`                         | ✅     |
+| **PHP**          | `.php`                        | ✅     |
+| **Ruby**         | `.rb`                         | ✅     |
+| **Rust**         | `.rs`                         | ✅     |
+| **Lua**          | `.lua`                        | ✅     |
+| **Luau**         | `.luau`                       | ✅     |
+| **Dart**         | `.dart`                       | ✅     |
+| **Shell Script** | `.sh`, `.bash`                | ✅     |
 
 ### 🔮 Want More Languages?
 
@@ -40,10 +41,10 @@ Can't find your favorite programming language? **Open a feature request** and we
 3. **Watch your code run** in the integrated terminal
 4. **Get instant feedback** with colored success/error messages
 
-
 ## 🤝 Contributing
 
-Found a bug or want to contribute? 
+Found a bug or want to contribute?
+
 - **Report Issues** - Use GitHub issues for bug reports
 - **Feature Requests** - Suggest new languages or features
 - **Pull Requests** - Code contributions are welcome!

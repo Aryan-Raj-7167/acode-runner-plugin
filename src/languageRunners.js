@@ -120,6 +120,23 @@ export default class LanguageRunners {
 			],
 			description: 'Shell script interpreter'
 		});
+
+		// Dart
+		this.#runners.set('dart', {
+			extensions: ['dart'],
+			commands: [
+				{
+					cmd: 'DART_TELEMETRY_DISABLED=1 dart --suppress-analytics run "{file}" 2>/dev/null',
+					checkCommand: 'dart',
+					packages: ['dart-sdk'],
+					repositories: [
+						'https://dl-cdn.alpinelinux.org/alpine/edge/testing',
+						'https://dl-cdn.alpinelinux.org/alpine/edge/main'
+					]
+				}
+			],
+			description: 'Dart SDK'
+		});
 	}
 
 	/**
@@ -392,8 +409,8 @@ export default class LanguageRunners {
 	 */
 	async #checkCommandExists(commandConfig) {
 		try {
-			const mainCommand = commandConfig.cmd.split(' ')[0];
-			const result = await Executor.execute(`which ${mainCommand}`, true);
+			const mainCommand = commandConfig.checkCommand || commandConfig.cmd.split(' ')[0];
+			const result = await Executor.BackgroundExecutor.execute(`which ${mainCommand}`, true);
 			return result && result.trim() !== '';
 		} catch (_error) {
 			return false;
@@ -431,7 +448,7 @@ export default class LanguageRunners {
 		);
 
 		if (confirmed) {
-			await this.#installPackages(packages, runner.description);
+			await this.#installPackages(packages, runner.description, commandConfig.repositories);
 			return true;
 		}
 
@@ -441,7 +458,7 @@ export default class LanguageRunners {
 	/**
 	 * Install packages using Alpine's apk package manager (background process)
 	 */
-	async #installPackages(packages, description) {
+	async #installPackages(packages, description, repositories = []) {
 		const installLoader = loader.create(
 			'Installing Packages',
 			`Installing ${description}...`
@@ -450,7 +467,10 @@ export default class LanguageRunners {
 		try {
 			await Executor.execute('apk update', true);
 
-			const installCmd = `apk add ${packages.join(' ')}`;
+			const repoFlags = repositories.map(repo => `--repository=${repo}`).join(' ');
+			const installCmd = repositories.length > 0
+				? `apk add --no-cache ${repoFlags} ${packages.join(' ')}`
+				: `apk add ${packages.join(' ')}`;
 			await Executor.execute(installCmd, true);
 			installLoader.hide();
 			window.toast(`${description} installed successfully!`);
