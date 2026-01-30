@@ -262,13 +262,13 @@ export default class LanguageRunners {
 		const filename = file.filename;
 		const extension = filename.split('.').pop() || '';
 		
-		// Create wrapper script content
 		const wrapperScript = await this.#createWrapperScript(commandConfig, file, nameWithoutExt, fileContent);
 		const wrapperPath = `/tmp/acode_runner_${Date.now()}.sh`;
 		
-		// Use printf to create script 
 		const escapedScript = wrapperScript.replace(/'/g, "'\"'\"'");
-		const fullCommand = `printf '%s' '${escapedScript}' > '${wrapperPath}' && chmod +x '${wrapperPath}' && '${wrapperPath}' && rm -f '${wrapperPath}'`;
+		
+		// Suppress echo during setup, clear screen, then run cleanly
+		const fullCommand = `stty -echo 2>/dev/null; printf '%s' '${escapedScript}' > '${wrapperPath}' && chmod +x '${wrapperPath}'; clear; stty echo 2>/dev/null; '${wrapperPath}'; rm -f '${wrapperPath}'`;
 		
 		await this.#sendCommand(terminal, fullCommand);
 	}
@@ -325,9 +325,6 @@ export default class LanguageRunners {
 		// Create the wrapper script
 		let script = `#!/bin/bash\n`;
 		
-		// Clear screen properly and redirect any stderr from clear to /dev/null
-		script += `printf '\\033[2J\\033[H' 2>/dev/null\n`;
-		
 		// Create temp file if needed (completely silently)
 		if (needsTempFile) {
 			script += `cat > '${tempFile}' << 'SOURCE_EOF' 2>/dev/null\n${fileContent}\nSOURCE_EOF\n`;
@@ -352,7 +349,7 @@ export default class LanguageRunners {
 		script += `if [ $EXIT_CODE -eq 0 ]; then\n`;
 		script += `    echo -e "\\033[1;1;36m[RUNNER]\\033[0m \\033[1;32m✅ Program finished successfully\\033[0m"\n`;
 		script += `else\n`;
-		script += `    echo -e "\\033[1;1;36m[RUNNER]\\033[0m \\033[1;31m❌ Program finished with errors\\033[0m \\033[2;90m(exit code: $EXIT_CODE)\\033[0m"\n`;
+		script += `    echo -e "\\033[1;1;36m[RUNNER]\\033[0m \\033[1;31m❌ Program finished with errors\\033[0m \\033[2;90m(exit code: \$EXIT_CODE)\\033[0m"\n`;
 		script += `fi\n`;
 		script += `echo -e "\\033[2;90m────────────────────────────────────────\\033[0m"\n`;
 		
